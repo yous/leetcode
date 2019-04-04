@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
+/**
+ * Implementation of a hash table.
+ */
 typedef struct hash_entry {
     int key;
     int value;
@@ -155,6 +158,9 @@ int *twoSum(int *nums, int numsSize, int target)
     return result;
 }
 
+/**
+ * Test code.
+ */
 void test1()
 {
     int nums[4] = {2, 7, 11, 15};

@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
+/**
+ * Implementation of a linked list.
+ */
 struct ListNode {
     int val;
     struct ListNode *next;
@@ -115,6 +118,9 @@ static struct ListNode *list_from_array(const int *array, const int size)
     return list;
 }
 
+/**
+ * Test code.
+ */
 void test1()
 {
     int num1[3] = {2, 4, 3};
