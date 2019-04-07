@@ -3,75 +3,65 @@
 
 double findMedianSortedArrays(int *nums1, int nums1Size, int *nums2, int nums2Size)
 {
-    int med_idx1, med_idx2;
-    int num_idx1, num_idx2;
-    int idx;
-    int med1, med2;
+    int *m_arr;
+    int *n_arr;
+    int m, n;
+    int i_min, i_max;
+    int i, j;
 
-    med_idx1 = (nums1Size + nums2Size - 1) / 2;
-    med_idx2 = (nums1Size + nums2Size) / 2;
-
-    if (nums1Size == 0) {
-        return ((double) nums2[med_idx1] + (double) nums2[med_idx2]) / 2.0;
-    } else if (nums2Size == 0) {
-        return ((double) nums1[med_idx1] + (double) nums1[med_idx2]) / 2.0;
+    if (nums1Size > nums2Size) {
+        m_arr = nums2;
+        n_arr = nums1;
+        m = nums2Size;
+        n = nums1Size;
+    } else {
+        m_arr = nums1;
+        n_arr = nums2;
+        m = nums1Size;
+        n = nums2Size;
     }
 
-    num_idx1 = 0;
-    num_idx2 = 0;
-    idx = 0;
+    i_min = 0;
+    i_max = m;
 
-    while (idx <= med_idx2) {
-        if (num_idx1 < nums1Size && num_idx2 < nums2Size) {
-            if (nums1[num_idx1] <= nums2[num_idx2]) {
-                if (idx == med_idx1) {
-                    med1 = nums1[num_idx1];
-                }
+    while (i_min <= i_max) {
+        i = (i_min + i_max) / 2;
+        j = (m + n + 1) / 2 - i;
 
-                if (idx == med_idx2) {
-                    med2 = nums1[num_idx1];
-                }
+        if (i < i_max && n_arr[j - 1] > m_arr[i]) {
+            i_min = i + 1;
+        } else if (i > i_min && m_arr[i - 1] > n_arr[j]) {
+            i_max = i - 1;
+        } else {
+            int max_left;
+            int min_right;
 
-                num_idx1++;
-                idx++;
+            if (i == 0) {
+                max_left = n_arr[j - 1];
+            } else if (j == 0) {
+                max_left = m_arr[i - 1];
             } else {
-                if (idx == med_idx1) {
-                    med1 = nums2[num_idx2];
-                }
-
-                if (idx == med_idx2) {
-                    med2 = nums2[num_idx2];
-                }
-
-                num_idx2++;
-                idx++;
-            }
-        } else if (num_idx1 < nums1Size) {
-            if (idx == med_idx1) {
-                med1 = nums1[num_idx1];
+                max_left = m_arr[i - 1] > n_arr[j - 1]
+                    ? m_arr[i - 1] : n_arr[j - 1];
             }
 
-            if (idx == med_idx2) {
-                med2 = nums1[num_idx1];
+            if ((m + n) % 2 == 1) {
+                return max_left;
             }
 
-            num_idx1++;
-            idx++;
-        } else if (num_idx2 < nums2Size) {
-            if (idx == med_idx1) {
-                med1 = nums2[num_idx2];
+            if (i == m) {
+                min_right = n_arr[j];
+            } else if (j == n) {
+                min_right = m_arr[i];
+            } else {
+                min_right = m_arr[i] < n_arr[j] ? m_arr[i] : n_arr[j];
             }
 
-            if (idx == med_idx2) {
-                med2 = nums2[num_idx2];
-            }
-
-            num_idx2++;
-            idx++;
+            return (max_left + min_right) / 2.0;
         }
     }
 
-    return ((double) med1 + (double) med2) / 2.0;
+    return 0.0;
 }
 
 /**
