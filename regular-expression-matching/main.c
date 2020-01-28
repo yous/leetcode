@@ -3,61 +3,22 @@
 #include <stdbool.h>
 
 bool isMatch(char *s, char *p) {
-    char *s_ptr = s;
-    char *p_ptr = p;
     char pat;
-    int repeat;
+    char following;
 
-    if (*p_ptr == '\0') {
-        return *s_ptr == '\0';
+    if (*p == '\0') {
+        return *s == '\0';
     }
 
-    if (*s_ptr == '\0') {
-        while (*p_ptr != '\0') {
-            p_ptr++;
+    pat = *p;
+    following = *(p + 1);
 
-            if (*p_ptr == '*') {
-                p_ptr++;
-            } else {
-                return false;
-            }
-        }
-
-        return true;
+    if (following == '*') {
+        return isMatch(s, p + 2) ||
+            (*s != '\0' && (pat == '.' || *s == pat) && isMatch(s + 1, p));
+    } else {
+        return *s != '\0' && (pat == '.' || *s == pat) && isMatch(s + 1, p + 1);
     }
-
-    while (*p_ptr != '\0' && *s_ptr != '\0') {
-        pat = *p_ptr++;
-
-        if (*p_ptr == '*') {
-            p_ptr++;
-            repeat = 1;
-        } else {
-            repeat = 0;
-        }
-
-        if (repeat) {
-            if (isMatch(s_ptr, p_ptr)) {
-                return true;
-            }
-
-            while ((pat == '.' && *s_ptr != '\0') || *s_ptr == pat) {
-                s_ptr++;
-
-                if (isMatch(s_ptr, p_ptr)) {
-                    return true;
-                }
-            }
-        } else {
-            if (pat == '.' || *s_ptr == pat) {
-                s_ptr++;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    return isMatch(s_ptr, p_ptr);
 }
 
 /**
